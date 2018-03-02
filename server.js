@@ -31,7 +31,7 @@ process.env.BROWSER = false;
 
 const debug = debugLib('slidewiki-platform');
 
-const host = process.env.HOST ? process.env.HOST : '0.0.0.0';
+const host = '127.0.0.1';
 let port = 3000 ;
 if(env === 'production'){
     port = process.env.PORT ? process.env.PORT :  3000;
@@ -87,9 +87,12 @@ fetchrPlugin.registerService(require('./services/presentation'));
 fetchrPlugin.registerService(require('./services/notifications'));
 fetchrPlugin.registerService(require('./services/user'));
 fetchrPlugin.registerService(require('./services/searchresults'));
+fetchrPlugin.registerService(require('./services/semsearch'));
 fetchrPlugin.registerService(require('./services/userProfile'));
 fetchrPlugin.registerService(require('./services/suggester'));
+fetchrPlugin.registerService(require('./services/tags'));
 fetchrPlugin.registerService(require('./services/logservice'));
+fetchrPlugin.registerService(require('./services/annotations'));
 
 server.use((req, res, next) => {
     req.reqId = uuidV4().replace(/-/g, '');

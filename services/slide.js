@@ -13,7 +13,6 @@ export default {
         if(resource === 'slide.content'){
             /*********connect to microservices*************/
             rp.get({uri: Microservices.deck.uri + '/slide/' + selector.sid}).then((res) => {
-            //rp.get({uri: Microservices.deck.uri + '/slide/575060ae4bc68d1000ea952b'}).then((res) => {
                 //console.log('From slide Service:', res);
                 callback(null, {slide: JSON.parse(res), selector: selector, 'page': params.page, 'mode': args.mode});
             }).catch((err) => {

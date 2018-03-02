@@ -104,7 +104,7 @@ class SearchPanel extends React.Component {
         });
 
         this.refs.keywords.blur();
-
+        
         return false;
     }
     render() {

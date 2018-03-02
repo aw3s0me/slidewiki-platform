@@ -40,6 +40,9 @@ class ContentActionsHeader extends React.Component {
         const addDeckClass = classNames({
             'item ui small basic left attached button': true
         });
+        const annotateClass = classNames({
+            'item ui small basic left attached button': true
+        });
         const duplicateItemClass = classNames({
             'item ui small basic left attached button': true,
             'disabled': contentDetails.selector.id === contentDetails.selector.sid || contentDetails.selector.stype==='deck'

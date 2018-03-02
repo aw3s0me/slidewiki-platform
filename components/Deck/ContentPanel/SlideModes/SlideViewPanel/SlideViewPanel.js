@@ -4,9 +4,32 @@ import {connectToStores} from 'fluxible-addons-react';
 import SlideViewStore from '../../../../../stores/SlideViewStore';
 import ResizeAware from 'react-resize-aware';
 import { findDOMNode } from 'react-dom';
+import AnnotationContextMenu from '../../../../Annotation/AnnotationContextMenu';
+import addTempSelection from "../../../../../actions/annotations/addTempSelection";
 const ReactDOM = require('react-dom');
+import { ContextMenu, MenuItem, ContextMenuTrigger, SubMenu } from 'react-contextmenu';
+import SelectionPopover from 'react-selection-popover';
+import AddAnnotationPopover from '../../../../Annotation/Popover/AddAnnotationPopover';
 
 class SlideViewPanel extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showPopover: false,
+            chosen: null
+        }
+    }
+    onSelect() {
+        this.context.executeAction(addTempSelection);
+        this.getHighlightedOnOpened();
+        this.setState({showPopover: true});
+    }
+    getHighlightedOnOpened() {
+        let chosenElement = $('#inlineContent').find('.r_highlight');
+        if (chosenElement) {
+            this.setState({chosen: chosenElement});
+        }
+    }
     render() {
         //styles should match slideContentEditor for consistency
         const compHeaderStyle = {
@@ -20,19 +43,10 @@ class SlideViewPanel extends React.Component {
             minHeight: 450,
             //minHeight: '100%',
             overflowY: 'auto',
-            overflowX: 'auto',
+            overflowX: 'hidden',
             //overflowY: 'visible',
             //overflow: 'hidden,'
             position: 'relative'
-        };
-        const contentStyle = {
-            minWidth: '100%',
-            // maxHeight: 450,
-            minHeight: 450,
-            overflowY: 'auto',
-            overflowX: 'auto',
-            //borderStyle: 'dashed',
-            //borderColor: '#e7e7e7',
         };
         const sectionElementStyle = {
             overflowY: 'hidden',
@@ -52,24 +66,37 @@ class SlideViewPanel extends React.Component {
 
 
         return (
-          <div className="ui bottom attached segment">
-              <ResizeAware ref='container' id='container'>
-                  <div ref="slideViewPanel" className="ui" style={compStyle}>
-                      <div className="reveal">
-                          <div className="slides">
-                            <section className="present"  style={sectionElementStyle}>
-                              <div style={contentStyle} name='inlineContent' ref='inlineContent' id='inlineContent' dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}}></div>
-                            </section>
-                          </div>
-                          <br />
-                      </div>
-                  </div>
-                  <div ref="slideViewPanelSpeakerNotes" className="ui" style={compSpeakerStyle}>
-                      {this.props.SlideViewStore.speakernotes ? <b>Speaker notes:</b> : ''}
-                      <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
-                  </div>
-              </ResizeAware>
-        </div>
+            <div className="ui bottom attached segment">
+                <ResizeAware ref='container' id='container'>
+                    <div ref="slideViewPanel" className="ui" style={compStyle}>
+                        <ContextMenuTrigger id="anno-context-menu">
+                            <div className="reveal">
+                                <div className="slides">
+                                    <section className="present"  style={sectionElementStyle}>
+                                        <div id="inlineContent"
+                                             dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.content}}
+                                             data-selectable
+                                        />
+                                        <SelectionPopover
+                                            showPopover={this.state.showPopover}
+                                            onSelect={this.onSelect.bind(this)}
+                                            onDeselect={() => {this.setState({showPopover: false})}}
+                                        >
+                                            <AddAnnotationPopover chosen={this.state.chosen} />
+                                        </SelectionPopover>
+                                    </section>
+                                </div>
+                                <br />
+                            </div>
+                        </ContextMenuTrigger>
+                        <AnnotationContextMenu />
+                    </div>
+                    <div ref="slideViewPanelSpeakerNotes" className="ui" style={compSpeakerStyle}>
+                        {this.props.SlideViewStore.speakernotes ? <b>Speaker notes:</b> : ''}
+                        <div dangerouslySetInnerHTML={{__html:this.props.SlideViewStore.speakernotes}} />
+                    </div>
+                </ResizeAware>
+            </div>
         );
     }
     componentDidMount(){
@@ -134,18 +161,18 @@ class SlideViewPanel extends React.Component {
             //this.refs.slideViewPanel.style.padding = '20px 20px 20px 20px';
             //$(".pptx2html").css({'padding': '20px 20px 20px 20px'});
             //style.padding left = 20 px, top 20 px
-            //this.refs.slideViewPanel.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
-            //set height of content panel to at least size of pptx2html + (100 pixels * scaleratio).
-            this.refs.slideViewPanel.style.height = ((pptxheight + 5 + 20) * this.scaleratio) + 'px';
-            this.refs.inlineContent.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
+            this.refs.slideViewPanel.style.height = ((pptxheight + 0 + 20) * this.scaleratio) + 'px';
 
-            //show that content is outside of pptx2html box
-            $('.pptx2html').css({'borderStyle': 'none none double none', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
+            $('.pptx2html').css({'borderStyle': 'none none double none ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
             //all borders
             //$(".pptx2html").css({'borderStyle': 'double double double double ', 'borderColor': '#3366ff', 'box-shadow': '0px 100px 1000px #ff8787'});
         }
     }
 }
+
+SlideViewPanel.contextTypes = {
+    executeAction: React.PropTypes.func.isRequired
+};
 
 SlideViewPanel = connectToStores(SlideViewPanel, [SlideViewStore], (context, props) => {
     return {

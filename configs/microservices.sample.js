@@ -64,6 +64,11 @@ export default {
         },
         'pdf': {
             uri : 'https://pdfservice.experimental.slidewiki.org'
+        },
+        'semsearch': {
+            uri: 'http://localhost',
+            path: '/api',
+            port: 8089
         }
     }
 };

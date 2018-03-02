@@ -34,3 +34,8 @@
 	padding-bottom: 0.21428571em;
 }
 
+/** OVERRIDING REVEAL.JS SLIDES to SHOW MODAL **/
+
+.reveal .slides {
+    z-index: 0 !important;
+}

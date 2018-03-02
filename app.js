@@ -13,6 +13,7 @@ import SlideViewStore from './stores/SlideViewStore';
 import SlideEditStore from './stores/SlideEditStore';
 import DataSourceStore from './stores/DataSourceStore';
 import TagsStore from './stores/TagsStore';
+import AnnotationStore from './stores/AnnotationStore';
 import ActivityFeedStore from './stores/ActivityFeedStore';
 import DeckTreeStore from './stores/DeckTreeStore';
 import TranslationStore from './stores/TranslationStore';
@@ -26,6 +27,7 @@ import ImportStore from './stores/ImportStore';
 import PresentationStore from './stores/PresentationStore';
 import UserNotificationsStore from './stores/UserNotificationsStore';
 import UserRegistrationStore from './stores/UserRegistrationStore';
+import SemanticSearchStore from './stores/SemanticSearchStore';
 import SearchResultsStore from './stores/SearchResultsStore';
 import SearchParamsStore from './stores/SearchParamsStore';
 import AdvancedSearchStore from './stores/AdvancedSearchStore';
@@ -54,6 +56,7 @@ const app = new Fluxible({
         SlideEditStore,
         DataSourceStore,
         TagsStore,
+        AnnotationStore,
         ActivityFeedStore,
         DeckTreeStore,
         TranslationStore,
@@ -72,6 +75,7 @@ const app = new Fluxible({
         AdvancedSearchStore,
         UserProfileStore,
         ErrorStore,
+        SemanticSearchStore,
         AddDeckStore,
         ResetPasswordStore,
         RevisioningStore,

@@ -7,3 +7,6 @@
 [submodule "custom_modules/reveal.js"]
 	path = custom_modules/reveal.js
 	url = https://github.com/slidewiki/reveal.js
+[submodule "custom_modules/semantic-ui-calendar"]
+	path = custom_modules/semantic-ui-calendar
+	url = https://github.com/mdehoog/Semantic-UI-Calendar.git
